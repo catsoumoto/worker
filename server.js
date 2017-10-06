@@ -8,6 +8,7 @@ connection.on('error', function (e) {
 });
 // Wait for connection to become established.
 connection.on('ready', function () {
+    console.log('Connect to (rabbit-server)');
     // Use the default 'amq.topic' exchange
     connection.queue('worker', function (q) {
         // Catch all messages
