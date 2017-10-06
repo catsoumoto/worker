@@ -4,8 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node service.js",
-    "startLocal": "node service.js",
+    "start": "node server.js",
     "build": "tsc",
     "build:w": "tsc -w --noUnusedParameters --noUnusedLocals"
   },
