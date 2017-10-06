@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var amqp = require("amqp");
-var connection = amqp.createConnection({ host: 'rabbit-server' });
+var connection = amqp.createConnection({ host: 'rabbitserver' });
 // add this for better debuging
 connection.on('error', function (e) {
     console.log("Error from amqp: ", e);
 });
 // Wait for connection to become established.
 connection.on('ready', function () {
-    console.log('Connect to (rabbit-server)');
+    console.log('Connect to (rabbitserver)');
     // Use the default 'amq.topic' exchange
     connection.queue('worker', function (q) {
         // Catch all messages
