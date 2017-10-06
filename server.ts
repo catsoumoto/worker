@@ -22,6 +22,7 @@ connection.on('ready', function () {
         q.subscribe(function (message) {
             // Print messages to stdout
             console.log(message);
+            this.rabConnection.publish(message, "Traiter uuid: " + message);
         });
     });
 });
