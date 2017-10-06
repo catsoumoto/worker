@@ -21,8 +21,8 @@ connection.on('ready', function () {
         // Receive messages
         q.subscribe(function (message) {
             // Print messages to stdout
-            console.log(message);
-            this.rabConnection.publish(message, "Traiter uuid: " + message);
+            console.log("Worker msg:" + message);
+            connection.publish(message, "Traiter uuid: " + message);
         });
     });
 });
