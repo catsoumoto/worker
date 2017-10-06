@@ -20,8 +20,8 @@ connection.on('ready', function () {
         // Receive messages
         q.subscribe(function (message) {
             // Print messages to stdout
-            console.log("Worker msg:" + JSON.stringify(message));
-            connection.publish(message, "Traiter uuid: " + message);
+            console.log("Worker msg:" + JSON.stringify(message.uuid));
+            connection.publish(message.uuid, "Traiter uuid: " + message.uuid);
         });
     });
 });
