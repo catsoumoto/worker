@@ -33,7 +33,10 @@ connectionGet.on('ready', function () {
         q.subscribe(function (message) {
             // Print messages to stdout
             console.log("Worker msg:" + JSON.stringify(message.uuid));
-            connectionPush.publish(message.uuid, { msg: "Traiter uuid: " + message.uuid });
+            connectionPush.publish(message.uuid, { msg: "Traiter uuid: " + message.uuid }, function (param1, param2) {
+                console.log("param1 : " + param1);
+                console.log("param2 : " + param1);
+            });
         });
     });
 });
