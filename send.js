@@ -15,11 +15,15 @@ var Send = /** @class */ (function () {
         this.rabConnection.on('ready', function () {
             console.log('Connect to (rabbitserver) connectionPush');
         });
+        this.rabConnection.exchange('my-exchange', function (exchange) {
+            console.log('Exchange create');
+            this.exchange = exchange;
+        });
     }
     Send.prototype.sendMsg = function (routingkey, msg) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.rabConnection.publish(routingkey, { msg: msg }, { persistent: true }, function (param1, param2) {
+            _this.exchange.publish(routingkey, { msg: msg }, { immediate: true }, function (param1, param2) {
                 if (param1) {
                     reject(param1);
                 }

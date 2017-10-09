@@ -16,7 +16,7 @@ let send = new Send();
 connectionGet.on('ready', function () {
     console.log('Connect to (rabbitserver) connectionGet');
     // Use the default 'amq.topic' exchange
-    connectionGet.queue('worker', function (q) {
+    connectionGet.queue('worker', {autoDelete: false}, function (q) {
         // Catch all messages
         q.bind('#');
         
