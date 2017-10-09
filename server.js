@@ -21,7 +21,7 @@ connection.on('ready', function () {
         q.subscribe(function (message) {
             // Print messages to stdout
             console.log("Worker msg:" + JSON.stringify(message.uuid));
-            connection.publish(message.uuid, "Traiter uuid: " + message.uuid);
+            connection.publish({ msg: message.uuid }, "Traiter uuid: " + message.uuid);
         });
     });
 });
