@@ -22,7 +22,7 @@ export class Send {
 
     public sendMsg(routingkey, msg) {
         return new Promise((resolve, reject) => {
-            this.rabConnection.publish(routingkey, {msg}, { immediate: true }, (err) => {
+            this.rabConnection.publish(routingkey, {msg}, (err) => {
                 if (err) {
                     reject(err);
                 } else {

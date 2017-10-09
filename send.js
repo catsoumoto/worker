@@ -19,7 +19,7 @@ var Send = /** @class */ (function () {
     Send.prototype.sendMsg = function (routingkey, msg) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.rabConnection.publish(routingkey, { msg: msg }, { immediate: true }, function (err) {
+            _this.rabConnection.publish(routingkey, { msg: msg }, function (err) {
                 if (err) {
                     reject(err);
                 }
