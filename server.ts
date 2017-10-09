@@ -1,4 +1,5 @@
 import * as amqp from 'amqp';
+import { Send } from './send';
 
 var connectionGet = amqp.createConnection({ 
     host: 'rabbitserver'
@@ -10,20 +11,7 @@ connectionGet.on('error', function(e) {
   console.log("Error from amqp: ", e);
 });
 
-var connectionPush = amqp.createConnection({ 
-    host: 'rabbitserver'
-    , login: 'fravaud'
-    , password: 'BBjakmlc100489' });
-
-// add this for better debuging
-connectionPush.on('error', function(e) {
-  console.log("Error from amqp: ", e);
-});
-
-connectionPush.on('ready', function () {
-    console.log('Connect to (rabbitserver) connectionPush');
-});
-
+let send = new Send();
 // Wait for connection to become established.
 connectionGet.on('ready', function () {
     console.log('Connect to (rabbitserver) connectionGet');
@@ -36,11 +24,9 @@ connectionGet.on('ready', function () {
         q.subscribe(function (message) {
             // Print messages to stdout
             console.log("Worker Receive msg:" + JSON.stringify(message.uuid));
-            connectionPush.publish(message.uuid, {msg: "Traiter uuid: " + message.uuid}, { persistent: true }, (param1, param2) => {
-                console.log("Worker Send msg:" + JSON.stringify({msg: "Traiter uuid: " + message.uuid}));
-                console.log("param1 : " + param1);
-                console.log("param2 : " + param1);
-            });
+            send.sendMsg(message.uuid, "Traiter uuid: " + message.uuid)
+                .then(() => console.log("send"))
+                .catch((err) => console.log(err));
         });
     });
 });
