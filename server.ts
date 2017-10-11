@@ -1,17 +1,27 @@
-import * as amqp from 'amqp';
+import * as amqplib from "amqplib"
+
 import { Send } from './send';
 
-var connectionGet = amqp.createConnection({ 
-    host: 'rabbitserver'
-    , login: 'fravaud'
-    , password: 'BBjakmlc100489' });
-
-// add this for better debuging
-connectionGet.on('error', function(e) {
-  console.log("Error from amqp: ", e);
-});
+let rabConnection = amqplib.connect('amqp://fravaud:BBjakmlc100489@rabbitserver');
 
 let send = new Send();
+
+this.rabConnection
+    .then((conn) => conn.createChannel())
+    .then((ch) => {
+        return ch.assertQueue('worker')
+            .then((ok) => ch.consume('worker', (msg) => {
+                if (msg !== null) {
+                    console.log("Worker Receive msg:" + JSON.stringify(msg));
+                    send.sendMsg(msg.uuid, "Traiter uuid: " + msg.uuid)
+                        .then(() => console.log("send"))
+                        .catch((err) => console.log(err));
+                    ch.ack(msg);
+                }
+            }));
+    }).catch((err) => console.warn(err));
+
+/*
 // Wait for connection to become established.
 connectionGet.on('ready', function () {
     console.log('Connect to (rabbitserver) connectionGet');
@@ -29,4 +39,4 @@ connectionGet.on('ready', function () {
                 .catch((err) => console.log(err));
         });
     });
-});
+});*/

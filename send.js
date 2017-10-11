@@ -1,33 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var amqp = require("amqp");
+var amqplib = require("amqplib");
 var Send = /** @class */ (function () {
     function Send() {
-        this.rabConnection = amqp.createConnection({
-            host: 'rabbitserver',
-            login: 'fravaud',
-            password: 'BBjakmlc100489'
-        });
-        // add this for better debuging
-        this.rabConnection.on('error', function (e) {
-            console.log("Error from amqp: ", e);
-        });
-        this.rabConnection.on('ready', function () {
-            console.log('Connect to (rabbitserver) connectionPush');
-        });
+        this.rabConnection = amqplib.connect('amqp://fravaud:BBjakmlc100489@rabbitserver');
     }
     Send.prototype.sendMsg = function (routingkey, msg) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.rabConnection.publish(routingkey, { msg: msg }, function (err) {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    console.log("Worker Send msg:" + JSON.stringify({ msg: msg }));
-                    resolve();
-                }
-            });
+            _this.rabConnection
+                .then(function (conn) { return conn.createChannel(); })
+                .then(function (ch) {
+                return ch.assertQueue(routingkey)
+                    .then(function (ok) { return ch.sendToQueue(routingkey, { msg: msg }); });
+            }).catch(function (err) { return console.warn(err); });
+            /*
+                        this.rabConnection.publish(routingkey, {msg}, (err) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                console.log("Worker Send msg:" + JSON.stringify({msg}));
+                                resolve();
+                            }
+                        });*/
         });
     };
     return Send;
