@@ -6,7 +6,7 @@ let rabConnection = amqplib.connect('amqp://fravaud:BBjakmlc100489@rabbitserver'
 
 let send = new Send();
 
-this.rabConnection
+rabConnection
     .then((conn) => conn.createChannel())
     .then((ch) => {
         return ch.assertQueue('worker')

@@ -4,7 +4,7 @@ var amqplib = require("amqplib");
 var send_1 = require("./send");
 var rabConnection = amqplib.connect('amqp://fravaud:BBjakmlc100489@rabbitserver');
 var send = new send_1.Send();
-this.rabConnection
+rabConnection
     .then(function (conn) { return conn.createChannel(); })
     .then(function (ch) {
     return ch.assertQueue('worker')
